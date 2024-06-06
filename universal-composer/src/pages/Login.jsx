@@ -1,4 +1,3 @@
-// // Login.js
 import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import loginBg from '../asset/loginBg.png';
@@ -141,20 +140,17 @@ const ToggleButton = styled.button`
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    const storedAuth = JSON.parse(localStorage.getItem('auth'));
+    const storedAuth = localStorage.getItem('login-token');
     if (storedAuth) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
+      navigate('/');
     }
-  }, []);
+  }, [navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -196,21 +192,19 @@ const Login = () => {
             console.log(response)
 
             if (response.data.authToken) {
-              navigate('/')
                 localStorage.setItem('login-token', response.data.authToken);
-                toast.success('User Login Successfully')
-                    
-            }else{
-              toast.error('Username or password is incorrect. Please try again.')
+                toast.success('User Login Successfully');
+                navigate('/');
+            } else {
+              toast.error('Username or password is incorrect. Please try again.');
             }
             
         } catch (error) {
             console.error('There was an error!', error);
-            toast.error('Username or password is incorrect. Please try again.')
-            // Handle error (e.g., show error message to the user)
+            toast.error('Username or password is incorrect. Please try again.');
         }
     }
-};
+  };
 
   return (
     <>

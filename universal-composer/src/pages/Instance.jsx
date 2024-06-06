@@ -3,7 +3,7 @@ import loginBg from '../asset/loginBg.png';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+ /* @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap'); */
 
   body {
     background-image: url(${loginBg});
@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     background-repeat: no-repeat;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', Arial, sans-serif;
+    /* font-family: "Bebas Neue", sans-serif;  */
   }
 `;
 
@@ -44,7 +44,7 @@ const Container = styled.div`
 `;
 
 const AccordionWrapper = styled.div`
-  margin-top: 10px;
+  margin-top: 30px;
   width: 100%;
   z-index: 20;
 `;
@@ -179,7 +179,7 @@ const Accordion = () => {
       <GlobalStyle />
         <Subtitle>Set Up Instances</Subtitle>
       <Container>
-        <InputLabel htmlFor="autoSetupCheckbox">
+        <InputLabel style={{fontSize:'26px'}} htmlFor="autoSetupCheckbox">
         Do things manually 
           </InputLabel>
         <AccordionWrapper>
@@ -246,7 +246,7 @@ const Accordion = () => {
         </AccordionWrapper>
 
 {/* ----------- or ----------- */}
-<Divider>or</Divider>
+<Divider>OR</Divider>
 
         <CheckboxContainer>
           <input

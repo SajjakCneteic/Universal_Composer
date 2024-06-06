@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components';
-import { FaUser,  } from 'react-icons/fa';
-import { IoIosArrowBack,IoIosArrowForward } from "react-icons/io";
+import { FaUser, } from 'react-icons/fa';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import logo from '../asset/logo.png';
 import git from '../asset/git.png';
 import database from '../asset/database.png';
@@ -28,15 +28,15 @@ const UniversalComposer = () => {
         <Sidebar collapsed={isSidebarCollapsed} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           <LogoContainer>
             <div>
-            <img src={logo} alt="Logo" />
+              <img src={logo} alt="Logo" />
             </div>
-            {!isSidebarCollapsed && 
-            <h3 style={{color:'#333',marginTop:'8px'}}>Universal </h3>
-          }
-            {!isSidebarCollapsed && 
-            <h3 style={{color:'#333'}}>Composer </h3>
-          }
-           
+            {!isSidebarCollapsed &&
+              <h3 style={{ color: '#333', marginTop: '8px' }}>Universal </h3>
+            }
+            {!isSidebarCollapsed &&
+              <h3 style={{ color: '#333' }}>Composer </h3>
+            }
+
           </LogoContainer>
           <IconContainer>
             <Icon>
@@ -60,21 +60,24 @@ const UniversalComposer = () => {
               {!isSidebarCollapsed && <span>Info</span>}
             </Icon>
             <Icon>
-              <img src={help} alt="Help" />
-              {!isSidebarCollapsed && <span>Help</span>}
+              <a style={{ textDecoration: 'none', color: '#333', display: 'flex',alignItems:'center'   }} href="https://universalcommerce.com/en-us/" target='blank'>
+                <img src={help} alt="Help" />
+                {!isSidebarCollapsed && <span style={{ marginLeft: '12px' }}>Help</span>}
+              </a>
+
             </Icon>
           </IconContainer>
-          
-          <UserIcon collapsed={isSidebarCollapsed}  onMouseEnter={() => setIsUser(true)}  >
+
+          <UserIcon collapsed={isSidebarCollapsed} onMouseEnter={() => setIsUser(true)}  >
             <div>
-            <FaUser size={24} />
+              <FaUser size={24} />
             </div>
-            {!isSidebarCollapsed && <span style={{textAlign:'center'}}>My Account</span>}
+            {!isSidebarCollapsed && <span style={{ textAlign: 'center',fontSize:'14px' }}>My Account</span>}
           </UserIcon>
         </Sidebar>
         {isHovered &&
           <CollapseArrow onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onClick={toggleSidebarCollapse} collapsed={isSidebarCollapsed}>
-            {isSidebarCollapsed ?  <IoIosArrowForward color='black' />:<IoIosArrowBack color='black' /> }
+            {isSidebarCollapsed ? <IoIosArrowForward color='black' /> : <IoIosArrowBack color='black' />}
           </CollapseArrow>
         }
         <Div
@@ -82,7 +85,7 @@ const UniversalComposer = () => {
           onMouseLeave={() => setIsUser(false)}
           isSidebarCollapsed={isSidebarCollapsed}
           isUser={isUser}>
-        
+
           {/* <Header>User Details</Header> */}
           <LogoutButton>Logout</LogoutButton>
         </Div>
@@ -151,12 +154,12 @@ const Sidebar = styled.div`
   height: 100vh;
   transition: width 0.3s ease;
 
-  @media (max-width: 600px) {
+  /* @media (max-width: 600px) {
     width: ${({ collapsed }) => (collapsed ? '40px' : '100%')};
     height: auto;
     flex-direction: row;
     justify-content: space-around;
-  }
+  } */
 `;
 
 const CollapseArrow = styled.div`
