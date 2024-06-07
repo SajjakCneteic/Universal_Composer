@@ -146,12 +146,16 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState('');
 
   useEffect(() => {
-    const storedAuth = localStorage.getItem('login-token');
-    if (storedAuth) {
+    const tokenExpiration = sessionStorage.getItem('login-token-expiration');
+    const currentTime = new Date().getTime();
+
+    if (tokenExpiration && currentTime < tokenExpiration) {
       navigate('/');
+    } else {
+      sessionStorage.removeItem('login-token');
+      sessionStorage.removeItem('login-token-expiration');
     }
   }, [navigate]);
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -165,46 +169,94 @@ const Login = () => {
     let valid = true;
 
     if (!validateEmail(email)) {
-        setEmailError('Invalid email format');
-        valid = false;
+      setEmailError('Invalid email format');
+      valid = false;
     } else {
-        setEmailError('');
+      setEmailError('');
     }
 
     if (password.length < 6) {
-        setPasswordError('Password must be at least 6 characters long');
-        valid = false;
+      setPasswordError('Password must be at least 6 characters long');
+      valid = false;
     } else {
-        setPasswordError('');
+      setPasswordError('');
     }
 
     if (valid) {
-        try {
-            const response = await axios.post('https://x8ki-letl-twmt.n7.xano.io/api:IXwazaxs/auth/login', {
-                email: email,
-                password: password
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+      try {
+        const response = await axios.post('https://x8ki-letl-twmt.n7.xano.io/api:IXwazaxs/auth/login', {
+          email: email,
+          password: password
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-            console.log(response)
+        console.log(response);
 
-            if (response.data.authToken) {
-                localStorage.setItem('login-token', response.data.authToken);
-                toast.success('User Login Successfully');
-                navigate('/');
-            } else {
-              toast.error('Username or password is incorrect. Please try again.');
-            }
-            
-        } catch (error) {
-            console.error('There was an error!', error);
-            toast.error('Username or password is incorrect. Please try again.');
+        if (response.data.authToken) {
+          const expirationTime = new Date().getTime() + 5 * 60 * 1000; // 5 minutes from now
+          sessionStorage.setItem('login-token', response.data.authToken);
+          sessionStorage.setItem('login-token-expiration', expirationTime);
+
+          toast.success('User Login Successfully');
+          navigate('/');
+        } else {
+          toast.error('Username or password is incorrect. Please try again.');
         }
+        
+      } catch (error) {
+        console.error('There was an error!', error);
+        toast.error('Username or password is incorrect. Please try again.');
+      }
     }
   };
+
+  // const handleSubmit = async () => {
+  //   let valid = true;
+
+  //   if (!validateEmail(email)) {
+  //       setEmailError('Invalid email format');
+  //       valid = false;
+  //   } else {
+  //       setEmailError('');
+  //   }
+
+  //   if (password.length < 6) {
+  //       setPasswordError('Password must be at least 6 characters long');
+  //       valid = false;
+  //   } else {
+  //       setPasswordError('');
+  //   }
+
+  //   if (valid) {
+  //       try {
+  //           const response = await axios.post('https://x8ki-letl-twmt.n7.xano.io/api:IXwazaxs/auth/login', {
+  //               email: email,
+  //               password: password
+  //           }, {
+  //               headers: {
+  //                   'Content-Type': 'application/json'
+  //               }
+  //           });
+
+  //           console.log(response)
+
+  //           if (response.data.authToken) {
+  //               localStorage.setItem('login-token', response.data.authToken);
+  //               toast.success('User Login Successfully');
+  //               navigate('/');
+  //           } else {
+  //             toast.error('Username or password is incorrect. Please try again.');
+  //           }
+            
+  //       } catch (error) {
+  //           console.error('There was an error!', error);
+  //           toast.error('Username or password is incorrect. Please try again.');
+  //       }
+  //   }
+  // };
 
   return (
     <>

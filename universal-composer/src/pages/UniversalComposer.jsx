@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components';
 import { FaUser, } from 'react-icons/fa';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -10,12 +10,39 @@ import terminal from '../asset/terminal.png';
 import info from '../asset/info.png';
 import help from '../asset/help.png';
 import { DiVim } from 'react-icons/di';
+import { useNavigate } from 'react-router-dom';
 
 
 const UniversalComposer = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isUser, setIsUser] = useState(false)
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  console.log(isUser)
+
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const token = sessionStorage.getItem('login-token');
+      const tokenExpiration = sessionStorage.getItem('login-token-expiration');
+      const currentTime = new Date().getTime();
+
+      if (!token || !tokenExpiration || currentTime >= tokenExpiration) {
+        sessionStorage.removeItem('login-token');
+        sessionStorage.removeItem('login-token-expiration');
+        navigate('/login'); // Redirect to the login page if token is missing or expired
+      } else {
+        // setIsUser(true); // Optionally, set user state if token is valid
+      }
+    };
+
+    const intervalId = setInterval(checkTokenExpiration, 1000); // Check every second
+
+    // Check immediately on mount
+    checkTokenExpiration();
+
+    return () => clearInterval(intervalId); // Cleanup interval on unmount
+  }, [navigate]);
 
   const toggleSidebarCollapse = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -84,7 +111,8 @@ const UniversalComposer = () => {
           onMouseEnter={() => setIsUser(true)}
           onMouseLeave={() => setIsUser(false)}
           isSidebarCollapsed={isSidebarCollapsed}
-          isUser={isUser}>
+          isUser={isUser}
+          >
 
           {/* <Header>User Details</Header> */}
           <LogoutButton>Logout</LogoutButton>
@@ -104,7 +132,7 @@ const UniversalComposer = () => {
 export default UniversalComposer
 
 const Div = styled.div`
-  position: absolute;
+   position: absolute;
   left: ${({ isSidebarCollapsed }) => (isSidebarCollapsed ? '40px' : '120px')};
   display: ${({ isUser }) => (isUser ? 'block' : 'none')};
   background-color: #fff;

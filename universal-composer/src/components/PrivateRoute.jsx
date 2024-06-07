@@ -6,11 +6,16 @@ const PrivateRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem('login-token');
-        if (storedAuth) {
+        const token = sessionStorage.getItem('login-token');
+        const tokenExpiration = sessionStorage.getItem('login-token-expiration');
+        const currentTime = new Date().getTime();
+
+        if (token && tokenExpiration && currentTime < tokenExpiration) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);
+            sessionStorage.removeItem('login-token');
+            sessionStorage.removeItem('login-token-expiration');
             navigate('/login'); // Redirect to the login page if not authenticated
         }
     }, [navigate]);
